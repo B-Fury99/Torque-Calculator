@@ -1,1 +1,97 @@
-<!DOCTYPE html><html><head><title>Torque Calculator</title></head><body><h1>Torque Calculator</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Torque Calculator</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#3b82f6" />
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f9fafb;
+      color: #111827;
+    }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 1rem; }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      width: 100%;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      background: #e0f2fe;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Torque Calculator</h1>
+  <form id="torqueForm">
+    <label>
+      Bolt Diameter:
+      <input type="number" step="any" id="diameter" placeholder="e.g. 12" required />
+    </label>
+    <label>
+      Preload Force:
+      <input type="number" step="any" id="force" placeholder="e.g. 5000" required />
+    </label>
+    <label>
+      Friction Coefficient (μ):
+      <input type="number" step="any" id="friction" value="0.15" required />
+    </label>
+    <label>
+      Units:
+      <select id="units">
+        <option value="metric">Metric (mm, N)</option>
+        <option value="imperial">Imperial (in, lbf)</option>
+      </select>
+    </label>
+    <button type="submit">Calculate Torque</button>
+  </form>
+
+  <div class="result" id="result" style="display:none;"></div>
+
+  <script>
+    document.getElementById('torqueForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const d = parseFloat(document.getElementById('diameter').value);
+      const F = parseFloat(document.getElementById('force').value);
+      const mu = parseFloat(document.getElementById('friction').value);
+      const units = document.getElementById('units').value;
+
+      if (isNaN(d) || isNaN(F) || isNaN(mu)) {
+        alert("Please fill out all fields correctly.");
+        return;
+      }
+
+      const torque = (mu * F * d) / 2;
+      const unitLabel = units === "metric" ? "N·mm" : "lbf·in";
+
+      document.getElementById('result').style.display = "block";
+      document.getElementById('result').innerHTML = `
+        <strong>Calculated Torque:</strong><br />
+        ${torque.toFixed(2)} ${unitLabel}
+      `;
+    });
+  </script>
+</body>
+</html>
